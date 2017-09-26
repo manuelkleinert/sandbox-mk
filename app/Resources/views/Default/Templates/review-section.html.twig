@@ -1,0 +1,60 @@
+{% set reviewBlock = pimcore_block('reviewBlock') %}
+
+{% if editmode or not reviewBlock.isEmpty() %}
+    <div class="uk-container">
+        <div class="uk-section uk-section-secondary uk-position-relative">
+
+            <div class="uk-slideshow-controls uk-visible@s">
+                <a class="prev uk-slidenav-large uk-position-small uk-position-center-left uk-position-z-index"
+                   href="#" data-uk-slidenav-previous></a>
+                <a class="next uk-slidenav-large uk-position-small uk-position-center-right uk-position-z-index"
+                   href="#" data-uk-slidenav-next></a>
+            </div>
+
+            <div class="review-slider slick">
+
+                {% for i in pimcore_iterate_block(reviewBlock) %}
+
+                    {% set reviewImage = pimcore_image('reviewImage', {
+                        width: 120,
+                        height: 120,
+                        uploadPath: '/images/reviews',
+                        thumbnail: 'review-image'
+                    }) %}
+                    {% set reviewText = pimcore_textarea('reviewText', {
+                        height: 80
+                    }) %}
+                    {% set reviewName = pimcore_input('reviewName') %}
+
+                    {% if editmode or not reviewText.isEmpty() %}
+                        <div>
+                            <div class="uk-grid uk-grid-medium uk-flex-center uk-flex-middle" data-uk-grid>
+                                {% if editmode or not reviewImage.isEmpty() %}
+                                    <div class="uk-width-auto">
+                                        {% if editmode %}
+                                            {{ reviewImage|raw }}
+                                        {% else %}
+                                            {{ reviewImage.getThumbnail('review-image').getHtml({ class: 'uk-border-circle' })|raw }}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
+                                <div class="uk-width-1-2@m uk-width-2-3@s uk-width-1-1">
+                                    <p class="uk-text-muted uk-text-left@s uk-text-center">
+                                        {{ reviewText|raw }}
+
+                                        {% if editmode or not reviewName.isEmpty() %}
+                                            <br />
+                                            <strong class="uk-text-primary uk-text-meta">{{ reviewName|raw }}</strong>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+{% endif %}

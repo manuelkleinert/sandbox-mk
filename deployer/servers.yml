@@ -1,0 +1,6 @@
+dev:
+  host: demo.pimdev.ch
+  user: demo
+  password: 'qIwN8QXzVvyd'
+  stage: dev
+  deploy_path: /var/www/vhosts/demo.ch

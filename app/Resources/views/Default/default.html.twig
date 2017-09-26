@@ -1,0 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+
+    {% include 'Templates/big-hero.html.twig' %}
+
+    {% include 'Shop/Templates/shop-categories.html.twig' %}
+
+    {% include 'Templates/media-teaser.html.twig' %}
+
+    {% include 'Default/Templates/review-section.html.twig' %}
+
+    {{ render(controller('AppBundle:News:teaserSection')) }}
+
+{% endblock %}

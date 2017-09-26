@@ -1,0 +1,15 @@
+//
+// Pimcore backend styles
+//
+
+.page-loader {
+  display: none;
+}
+
+.uk-grid script {
+  display: none !important;
+}
+
+.pimcore_iframe_mask {
+  pointer-events: none;
+}

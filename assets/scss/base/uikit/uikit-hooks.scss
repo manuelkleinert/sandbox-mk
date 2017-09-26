@@ -1,0 +1,5 @@
+// Body
+@mixin hook-base-body() {
+  background: url('/build/images/polygons.jpg') no-repeat fixed;
+  background-size: cover;
+}
