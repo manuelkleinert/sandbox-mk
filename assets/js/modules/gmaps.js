@@ -1,14 +1,15 @@
-(function canvas($, UIkit) {
-  UIkit.component('canvas', {
+(function gmaps($, UIkit) {
+  UIkit.component('gmaps', {
 
-    name: 'canvas',
+    name: 'gmaps',
 
     props: {
-      canvas: Object,
+      map: Object,
       bgColor: String,
       bgTop: String,
       bgLeft: String,
       bgBottom: String,
+      
     },
 
     defaults: {

@@ -1,8 +1,8 @@
 // Imports
-// import Icons from 'uikit/dist/js/uikit-icons';
-import Icons from 'uikit/dist/js/uikit-icons-img';
+import Icons from 'uikit/dist/js/uikit-icons';
+// import Icons from 'uikit/dist/js/uikit-icons-img';
 import PageLoader from './utils/page-loader';
-import './modules/canvas-background';
+import './modules/gmaps';
 
 
 // Activate icons plugin

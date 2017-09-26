@@ -1,35 +1,21 @@
 <!doctype html>
-<!-- Copyright --
-                          _      _
-     _      __     _   __(_)____(_)___  ____
-    | | /| / /____| | / / / ___/ / __ \/ __ \
-    | |/ |/ /_____/ |/ / (__  ) / /_/ / / / /
-    |__/|__/      |___/_/____/_/\____/_/ /_/
-
-    Web development by
-    w-vision, Sandgruebestrasse 4, 6210 Sursee, Switzerland
-    https://www.w-vision.ch, support@w-vision.ch
-    Copyright © {{ 'now'|date('Y') }} w-vision. All rights reserved.
-    pimcore - The Open-Source Enterprise Content Platform
--->
 <html lang="{{ app.request.locale|slice(0, 2) }}">
 <head>{% include 'Layout/html-head.html.twig' %}</head>
 <body>
 
-    <div class="uk-offcanvas-content">
+    {% include 'Layout/header.html.twig' %}
 
-        {# page header #}
-        {% include 'Layout/header.html.twig' %}
+    {% include 'Slider/home-slider.html.twig' %}
 
-        <main class="main-content" data-uk-height-viewport="expand: true">
-            {# page content #}
-            {% block content %}{% endblock %}
-        </main>
+    <ul class="uk-breadcrumb">
+        <li><a href=""></a></li>
+        <li><a href=""></a></li>
+        <li><span href=""></span></li>
+    </ul>
 
-        {# page footer #}
-        {% include 'Layout/footer.html.twig' %}
+    {% block content %}{% endblock %}
 
-    </div>
+    {% include 'Layout/footer.html.twig' %}
 
     {# output scripts added before #}
     {% block scripts deferred %}
