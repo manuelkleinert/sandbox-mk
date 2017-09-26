@@ -18,11 +18,15 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends FrontendController
 {
     /**
+     * @param Request $request
+     *
      * @return string The template to be rendered
      */
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
-        return $this->renderTemplate('Default/default.html.twig');
+        return $this->renderTemplate('Default/default.html.twig', [
+            // 'params' => 'additional-data'
+        ]);
     }
 
     /**

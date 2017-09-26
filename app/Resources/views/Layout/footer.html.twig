@@ -1,44 +1,36 @@
-<div class="footer uk-container">
-    <div class="uk-section uk-section-secondary uk-preserve-color uk-padding-remove-vertical">
+<div class="uk-section uk-section-secondary">
+    <div class="uk-container">
 
-        <div class="uk-grid uk-grid-collapse uk-flex-middle" data-uk-grid>
-            {% if document.getProperty('shopPage') is instanceof('\\Pimcore\\Model\\Document\\Page') %}
-                <div class="uk-width-expand@s uk-width-1-1 uk-flex-last@s">
-                    <div class="uk-text-right">
-                        <a href="{{ document.getProperty('shopPage').getFullPath() }}"
-                           class="uk-button uk-button-primary uk-button-large uk-width-auto@s uk-width-1-1 uk-flex-middle">
-                            <span class="uk-margin-small-right" data-uk-icon="cart"></span> Zum Shop
-                        </a>
-                    </div>
+        <div class="uk-flex-middle uk-grid-margin uk-grid uk-grid-stack" data-uk-grid>
+            <div class="uk-width-1-1@m uk-first-column">
+                <div class="uk-margin-small uk-text-center ">
+                    <img width="100" height="25" src="{{ asset('build/images/logo.svg') }}" alt="Pimcore GmbH" data-uk-svg>
                 </div>
-            {% endif %}
-
-            {% if pimcore_website_config('linkedin') is not empty or pimcore_website_config('twitter') is not empty %}
-                <div class="uk-width-auto">
-                    <div class="social-media uk-padding-small">
-                        {% if pimcore_website_config('linkedin') is not empty %}
-                            <a href="{{ pimcore_website_config('linkedin') }}" class="uk-icon-link uk-margin-small-right"
-                               data-uk-icon="icon: linkedin; ratio: 1.3"></a>
-                        {% endif %}
-
-                        {% if pimcore_website_config('twitter') is not empty %}
-                            <a href="{{ pimcore_website_config('twitter') }}" class="uk-icon-link"
-                               data-uk-icon="icon: twitter; ratio: 1.3"></a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
-
-            {% if document.getProperty('imprintPage') is instanceof('\\Pimcore\\Model\\Document\\Page') %}
-                <div class="uk-width-auto@s uk-width-expand">
-                    <div class="legals uk-padding-small uk-text-right uk-text-left@s">
-                        <a class="uk-link-reset" href="{{ document.getProperty('imprintPage').getFullPath() }}">
-                            {{ 'app.footer.imprint.label'|trans }}
-                        </a>
-                    </div>
-                </div>
-            {% endif %}
+            </div>
         </div>
 
+        <div class="uk-flex-middle uk-margin uk-grid" data-uk-grid>
+            <div class="uk-width-expand@s uk-first-column">
+                <h3 class="uk-text-center">Visit Us</h3>
+                <div class="uk-margin uk-text-center">
+                    Söllheimstrasse 16<br />
+                    Salzburg, Austria
+                </div>
+            </div>
+            <div class="uk-width-expand@s">
+                <h3 class="uk-margin-remove-top uk-text-center">Contact</h3>
+                <div class="uk-margin uk-text-center">
+                    <a class="uk-link-reset" href="mailto:{{ 'info@pimcore.com'|obfuscateEmail }}">{{ 'info@pimcore.com'|obfuscateEmail }}</a><br />
+                    <a class="uk-link-reset" href="tel:+43(0)662876606230">+43 (0)662 876 606 230</a>
+                </div>
+            </div>
+            <div class="uk-width-expand@s">
+                <h3 class="uk-text-center">Hours</h3>
+                <div class="uk-margin uk-text-center">
+                    Mon – Fri 9 am – 17 pm<br/>
+                    Saturday/Sunday Closed
+                </div>
+            </div>
+        </div>
     </div>
 </div>

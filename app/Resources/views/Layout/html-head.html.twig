@@ -3,7 +3,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
 <link rel="icon" type="image/png" href="/pimcore/static6/img/favicon/favicon-32x32.png"/>
-<link href="https://fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet">
 
 {% spaceless -%}
     {# stylesheets #}
@@ -33,8 +32,8 @@
         {% do pimcore_head_title().set(document.getTitle()) %}
     {% endif %}
 
-    {% do pimcore_head_title().prepend('DEMO::Sporty AG') %}
-    {% do pimcore_head_title().setSeparator(' – ') %}
+    {% do pimcore_head_title().append('w-vision') %}
+    {% do pimcore_head_title().setSeparator(' | ') %}
 
     {# head description #}
     {% if document.getDescription() is not empty %}

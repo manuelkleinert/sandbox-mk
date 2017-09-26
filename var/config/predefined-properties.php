@@ -24,8 +24,8 @@ return [
         "config" => NULL,
         "ctype" => "document",
         "inheritable" => FALSE,
-        "creationDate" => 1505987727,
-        "modificationDate" => 1505987727
+        "creationDate" => 1506411285,
+        "modificationDate" => 1506411285
     ],
     3 => [
         "id" => 3,
@@ -37,33 +37,7 @@ return [
         "config" => NULL,
         "ctype" => "document",
         "inheritable" => FALSE,
-        "creationDate" => 1505987727,
-        "modificationDate" => 1505987727
-    ],
-    4 => [
-        "id" => 4,
-        "name" => "Imprint page",
-        "description" => "The imprint page.",
-        "key" => "imprintPage",
-        "type" => "document",
-        "data" => NULL,
-        "config" => NULL,
-        "ctype" => "document",
-        "inheritable" => TRUE,
-        "creationDate" => 1506007547,
-        "modificationDate" => 1506007594
-    ],
-    5 => [
-        "id" => 5,
-        "name" => "Shop page",
-        "description" => "The shop page.",
-        "key" => "shopPage",
-        "type" => "document",
-        "data" => NULL,
-        "config" => NULL,
-        "ctype" => "document",
-        "inheritable" => TRUE,
-        "creationDate" => 1506010075,
-        "modificationDate" => 1506010124
+        "creationDate" => 1506411285,
+        "modificationDate" => 1506411285
     ]
 ];
