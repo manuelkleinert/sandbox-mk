@@ -123,6 +123,9 @@ $global-z-index:                                 1000 !default;
 //
 
 // Base
+$global-font-family:                            'Open Sans', sans-serif;
+
+$base-heading-font-family:                      'Permanent Marker';
 $base-heading-font-weight:                      900;
 
 $base-h3-font-size:                             .7rem;
@@ -138,5 +141,6 @@ $alert-warning-background:                      $color-secondary;
 $alert-danger-background:                       $color-secondary;
 $alert-success-color:                           $color-primary;
 
-    // Disable Inverse components by default
+
+// Disable Inverse components by default
 //$inverse-global-color-mode:                      none;

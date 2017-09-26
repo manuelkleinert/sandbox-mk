@@ -4,8 +4,10 @@
 
 <link rel="icon" type="image/png" href="/pimcore/static6/img/favicon/favicon-32x32.png"/>
 
+
 {% spaceless -%}
     {# stylesheets #}
+    {% do pimcore_head_link().appendStylesheet('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800|Permanent+Marker') %}
     {% do pimcore_head_link().appendStylesheet(asset('build/css/global.css')) %}
 
     {% if editmode %}

@@ -1,0 +1,22 @@
+{% set backgroundImage = pimcore_href('backgroundImage', {
+    width: '100%',
+    reload: true,
+    uploadPath: '/bilder/hintergrund'
+}) %}
+
+{% set backgroundText = pimcore_input('backgroundTitle', {
+    class: 'uk-width-1-1 uk-text-center',
+}) %}
+
+<div class="uk-background-cover uk-height-medium uk-panel uk-flex uk-flex-center uk-flex-middle uk-light"
+     {% if not backgroundImage.isEmpty() %}style="background-image: url({{ backgroundImage.getElement().getThumbnail() }});"{% endif %}>
+
+    {% if not backgroundText.isEmpty() or editmode %}
+        <h1 class="uk-width-1-1 uk-text-center">
+            {{ backgroundText|raw }}
+        </h1>
+    {% endif %}
+</div>
+{% if editmode %}
+    {{ backgroundImage|raw }}
+{% endif %}
