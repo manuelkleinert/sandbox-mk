@@ -1,0 +1,43 @@
+/* Desktop and smaller */
+@media (max-width: $breakpoint-large-max) {
+    .logo {
+        width: 390px;
+    }
+
+    header {
+        position: relative;
+    }
+}
+
+/* Tablet landscape and smaller */
+@media (max-width: $breakpoint-medium-max) {
+    .logo {
+        width: 300px;
+        height: 110px;
+    }
+
+    header {
+        position: relative;
+    }
+}
+
+/* Phone landscape and smaller */
+@media (max-width: $breakpoint-small-max) {
+    .logo {
+        width: 250px;
+        height: 90px;
+    }
+
+    header{
+        background-color: $color-white;
+    }
+}
+
+/* Phone portrait and smaller */
+@media (max-width: $breakpoint-xsmall-max) {
+    .logo {
+        width: 210px;
+        height: 70px;
+    }
+}
+

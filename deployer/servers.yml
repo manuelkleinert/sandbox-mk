@@ -1,0 +1,6 @@
+dev:
+  host: sandbox.pimdev.ch
+  user: sandbox
+  password: ''
+  stage: dev
+  deploy_path: /var/www/vhosts/sandbox.ch

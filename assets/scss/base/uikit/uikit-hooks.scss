@@ -1,0 +1,22 @@
+// Place your hooks here
+@mixin hook-base-heading() {
+    letter-spacing: .1rem;
+}
+
+@mixin hook-base-h3() {
+    margin-bottom: 0;
+}
+
+@mixin hook-button() {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .1rem;
+}
+
+@mixin hook-base-body() {
+    font-size: $global-font-size-medium;
+
+    @media (min-width: $breakpoint-medium) {
+        font-size: $global-font-size;
+    }
+}

@@ -1,0 +1,23 @@
+.page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  color: $color-white;
+}
+
+.canvas-background {
+  z-index: -1;
+}
+
+/* Phone landscape and smaller */
+@media (max-width: $breakpoint-small-max) {
+  .tm-content {
+    background-color: $color-primary;
+  }
+  .tm-footer {
+    background-color: $color-secondary;
+  }
+}
