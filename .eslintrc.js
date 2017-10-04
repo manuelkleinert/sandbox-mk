@@ -9,6 +9,7 @@ module.exports = {
   'globals': {
     'UIkit': true,
     'Typekit': true,
+    'google': true,
   },
   'parser': 'babel-eslint',
   'rules': {
