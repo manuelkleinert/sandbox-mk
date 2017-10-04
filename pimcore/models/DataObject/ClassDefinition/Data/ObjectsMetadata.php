@@ -227,8 +227,21 @@ class ObjectsMetadata extends Model\DataObject\ClassDefinition\Data\Objects
 
                     foreach ($this->getColumns() as $c) {
                         $setter = 'set' . ucfirst($c['key']);
-                        $metaData->$setter($object[$c['key']]);
+                        $value = $object[$c['key']];
+
+                        if ($c['type'] == 'multiselect') {
+                            if ($value) {
+                                if (is_array($value) && count($value)) {
+                                    $value = implode(',', $value);
+                                }
+                            } else {
+                                $value = null;
+                            }
+                        }
+
+                        $metaData->$setter($value);
                     }
+
                     $objectsMetadata[] = $metaData;
                 }
             }
