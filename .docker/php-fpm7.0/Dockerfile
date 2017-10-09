@@ -14,6 +14,7 @@ RUN apt-get -y --no-install-recommends install wkhtmltopdf html2text ghostscript
 
 # Install Build Tools (getting removed later)
 RUN apt-get -y --no-install-recommends install autoconf automake libtool nasm make pkg-config libz-dev build-essential g++
+RUN apt-get install dos2unix
 
 RUN cd ~
 
@@ -68,6 +69,7 @@ RUN echo "xdebug.idekey = PHPSTORM" >> /etc/php/7.0/fpm/conf.d/20-xdebug.ini && 
     echo "xdebug.remote_host = 127.0.0.1" >> /etc/php/7.0/fpm/conf.d/20-xdebug.ini
 
 COPY entrypoint.sh /usr/local/bin/
+RUN dos2unix /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]
