@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     1 => [
@@ -13,5 +13,31 @@ return [
         "inheritable" => 1,
         "creationDate" => 0,
         "modificationDate" => 0
+    ],
+    2 => [
+        "id" => 2,
+        "name" => "User Email Document",
+        "description" => "Defines the email document, which is sent to the user.",
+        "key" => "userEmailDocument",
+        "type" => "document",
+        "data" => NULL,
+        "config" => NULL,
+        "ctype" => "document",
+        "inheritable" => FALSE,
+        "creationDate" => 1507541797,
+        "modificationDate" => 1507541797
+    ],
+    3 => [
+        "id" => 3,
+        "name" => "Admin Email Document",
+        "description" => "Defines the email document, which is sent to the admin.",
+        "key" => "adminEmailDocument",
+        "type" => "document",
+        "data" => NULL,
+        "config" => NULL,
+        "ctype" => "document",
+        "inheritable" => FALSE,
+        "creationDate" => 1507541797,
+        "modificationDate" => 1507541797
     ]
 ];

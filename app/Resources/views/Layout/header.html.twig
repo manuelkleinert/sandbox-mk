@@ -10,6 +10,10 @@
 
         <div class="uk-navbar-left">
 
+            <a class="uk-navbar-item uk-logo" href="{{ navStartNode }}">
+                <img width="200" height="50" src="{{ asset('build/images/logo.svg') }}" alt="Pimcore GmbH" class="uk-preserve" data-uk-svg>
+            </a>
+
             <div class="uk-visible@s">
                 {% include 'Navigation/navbar.html.twig' %}
             </div>
@@ -17,6 +21,12 @@
         </div>
 
         <div class="uk-navbar-right">
+
+            <div class="uk-visible@s">
+                {% include 'Navigation/search.html.twig' %}
+            </div>
+
+            {% include 'Navigation/language.html.twig' %}
 
             <div class="uk-hidden@s">
                 <a class="uk-navbar-toggle" href="#off-canvas" data-uk-toggle>
