@@ -5,6 +5,5 @@ import PageLoader from './utils/page-loader';
 import './modules/gmaps';
 // Activate icons plugin
 UIkit.use(Icons);
-
 // Execute Modules
 PageLoader();

@@ -79,9 +79,9 @@
 
       // Load API
       loadMap() {
-        window:googleMapsLoad = function{
-          console.log('load');
-        };
+        // window:googleMapsLoad = function{
+        //   console.log('load');
+        // };
 
         const googleScript = document.createElement('script');
         googleScript.setAttribute('type', 'text/javascript');
