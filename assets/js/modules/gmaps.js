@@ -1,5 +1,6 @@
 (function gmaps(UIkit) {
   UIkit.component('gmaps', {
+
     name: 'gmaps',
 
     props: {
@@ -24,7 +25,7 @@
       showMarker: Boolean,
       markerIcon: String,
       markerTitle: String,
-      markerContent: Boolean,
+      markerContent: String,
       markerOpen: Boolean,
       markerToggle: Boolean,
       markerHover: Boolean,
@@ -42,7 +43,7 @@
       apiKey: 'AIzaSyCWZ8cfcqoAGddyW3WO5lbCdwU2luJwbhc',
       lat: false,
       lng: false,
-      address: 'Luzern',
+      address: 'Sursee',
       location: false,
       geoLocation: true,
       top: 0,
@@ -56,10 +57,9 @@
       streetView: false,
       markerList: [],
       showMarker: true,
-      markerIcon: false,
-      markerTitle: false,
-      markerContent: false,
-      markerOpen: false,
+      markerIcon: 'default',
+      markerContent: 'Test',
+      markerOpen: true,
       markerToggle: false,
       markerHover: false,
       style: [],
@@ -70,6 +70,7 @@
     },
 
     connected() {
+      console.log(this.markerContent);
       this.initialize();
     },
 
@@ -251,7 +252,7 @@
       },
 
       // Add Marker
-      setMarker(opt) {
+      setMarker(config) {
         const markerCustom = {
           obj: false,
           location: [],
@@ -261,27 +262,17 @@
           find: false,
           showMarker: true,
           markerOpen: false,
-          markerIcon: '',
+          markerIcon: false,
           markerContent: false,
           markerDiv: false,
           innerRadius: false,
           radiusDictance: false,
           disableAutoPan: true,
           infowindow: false,
+          open: false,
         };
 
-        const marker = markerCustom.extend(opt);
-
-        if (marker.markerTitle && marker.markerContent) {
-          const markerContent = document.createElement('div'); $('<div>').addClass('infowindow');
-          markerContent.className = 'infowindow';
-          markerContent.appendChild(marker.markerContent);
-
-          marker.infowindow = new google.maps.InfoWindow({
-            content: markerContent,
-            disableAutoPan: this.disableAutoPan,
-          });
-        }
+        const marker = Object.assign({}, markerCustom, config);
 
         marker.obj = new google.maps.Marker({
           position: marker.location,
@@ -289,13 +280,52 @@
           map: this.map,
         });
 
-        this.markerList.push(marker.extend(opt));
+        if (marker.markerContent) {
+          const markerContent = document.createElement('div');
+          markerContent.className = 'infowindow';
+          markerContent.innerHTML = marker.markerContent;
+
+          marker.infowindow = new google.maps.InfoWindow({
+            content: markerContent,
+            disableAutoPan: this.disableAutoPan,
+          });
+
+          const markerOpenFn = function () {
+            marker.infowindow.open(this.map, marker.obj);
+            marker.open = true;
+          };
+
+          const markerCloseFn = function () {
+            marker.infowindow.close();
+            marker.open = false;
+          };
+
+          const markserClickToggleFn = function () {
+            if (marker.open) {
+              markerCloseFn();
+            } else {
+              markerOpenFn();
+            }
+          };
+
+          if (marker.markerOpen) {
+            markerOpenFn();
+          }
+
+          google.maps.event.addListener(marker.obj, 'click', markserClickToggleFn);
+
+          if (this.markerToggle) {
+            google.maps.event.addListener(marker.obj, 'mouseover', markerOpenFn);
+            google.maps.event.addListener(marker.obj, 'mouseout', markerCloseFn);
+          }
+        }
+
+        this.markerList.push(marker);
       },
 
       getMarkerList() {
         return this.markerList;
       },
-
     },
   });
 }(UIkit));
