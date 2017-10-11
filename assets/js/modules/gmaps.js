@@ -79,13 +79,15 @@
 
       // Load API
       loadMap() {
-        // window:googleMapsLoad = function{
-        //   console.log('load');
-        // };
+        const self = this;
+
+        window.mapsCallback = function () {
+          self.setMap();
+        };
 
         const googleScript = document.createElement('script');
         googleScript.setAttribute('type', 'text/javascript');
-        googleScript.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=googleMapsLoad`);
+        googleScript.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=mapsCallback`);
         document.getElementsByTagName('head')[0].appendChild(googleScript);
       },
 
@@ -134,8 +136,6 @@
           //   markerOpen: this.markerOpen,
           //   disableAutoPan: false,
           // });
-        } else {
-          console.log('test');
         }
       },
     },
