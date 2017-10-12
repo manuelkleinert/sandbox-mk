@@ -4,16 +4,12 @@
     name: 'gmaps',
 
     props: {
-      map: Object,
-      mapObj: Object,
       apiKey: String,
       lat: Number,
       lng: Number,
       address: String,
       location: Object,
       geoLocation: Boolean,
-      top: Number,
-      left: Number,
       zoom: Number,
       zoomControl: Boolean,
       scrollWheel: Boolean,
@@ -21,9 +17,9 @@
       mapTypeControl: Boolean,
       mapType: String,
       streetView: Boolean,
-      markerList: Array,
       showMarker: Boolean,
       markerIcon: String,
+      markerAnimation: Boolean,
       markerTitle: String,
       markerContent: String,
       markerOpen: Boolean,
@@ -31,23 +27,19 @@
       markerHover: Boolean,
       style: String,
       styledMap: String,
-      center: Boolean,
+      centerLatLng: Object,
       overlayLatLng: Boolean,
       overlayImg: Boolean,
       ready: Object,
     },
 
     defaults: {
-      map: false,
-      mapObj: false,
       apiKey: 'AIzaSyCWZ8cfcqoAGddyW3WO5lbCdwU2luJwbhc',
       lat: false,
       lng: false,
-      address: 'Sursee',
+      address: 'Sandgruebestrasse 4, 6210 Sursee',
       location: false,
-      geoLocation: true,
-      top: 0,
-      left: 0,
+      geoLocation: false,
       zoom: 12,
       zoomControl: true,
       scrollWheel: true,
@@ -55,28 +47,28 @@
       mapTypeControl: true,
       mapType: 'roadmap', // roadmap, satellite, hybrid, terrain
       streetView: false,
-      markerList: [],
       showMarker: true,
-      markerIcon: 'default',
-      markerContent: 'Test',
+      markerIcon: false,
+      markerAnimation: false,
+      markerContent: '<strong>Wochen Pass AG</strong><br>Sandgruebestrasse 4<br>6210 Sursee',
       markerOpen: true,
       markerToggle: false,
       markerHover: false,
       style: [],
-      center: true,
+      centerLatLng: false,
       overlayLatLng: false,
       overlayImg: false,
       ready: false,
     },
 
     connected() {
-      console.log(this.markerContent);
       this.initialize();
     },
 
     methods: {
       initialize() {
         if (!this.mapObj) {
+          this.markerObjectList = [];
           this.mapObj = this.$el[0];
           this.loadMap();
         }
@@ -86,38 +78,66 @@
       loadMap() {
         const self = this;
 
+        // Google Map is Ready
         window.mapsCallback = function () {
           if (typeof google === 'object' && typeof google.maps === 'object') {
             self.setLocation(self.setMap);
+
+            // set Event for Second map init
+            if (window.CustomEvent) {
+              const event = new CustomEvent('gmapsReady', {
+                detail: 'GoogleMaps ready',
+              });
+              document.dispatchEvent(event);
+            } else {
+              const event = document.createEvent('CustomEvent');
+              event.initCustomEvent('gmapsReady', true, true, {
+                detail: 'GoogleMaps ready',
+              });
+              document.dispatchEvent(event);
+            }
           }
         };
 
-        const googleScript = document.createElement('script');
-        googleScript.setAttribute('type', 'text/javascript');
-        googleScript.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=mapsCallback`);
-        document.getElementsByTagName('head')[0].appendChild(googleScript);
+        if (document.querySelectorAll('script[src^="https://maps.googleapis.com/maps/api/js?key"]').length === 0) {
+          const googleScript = document.createElement('script');
+          googleScript.setAttribute('type', 'text/javascript');
+          googleScript.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=mapsCallback`);
+          document.getElementsByTagName('head')[0].appendChild(googleScript);
+        } else {
+          const gmapInitFn = function () {
+            self.setLocation(self.setMap);
+          };
+          document.addEventListener('gmapsReady', gmapInitFn, false);
+        }
       },
 
       setLocation(fn) {
         const self = this;
+        console.log(this);
 
         const setLocationFn = function (pos) {
           if (pos) {
             self.location = pos;
             self.lat = self.location.lat();
             self.lng = self.location.lng();
-          }
-          if (fn) {
-            fn();
+
+            if (fn) {
+              fn();
+            }
+          } else {
+            console.log('no location');
           }
         };
 
-        // Geo Daten
-        if (this.geoLocation) {
+        if (this.location) {
+          setLocationFn(this.location);
+          // Geo Daten
+        } else if (this.geoLocation) {
           this.getLocationByGeolocation(setLocationFn);
-          // Adresse
+          // Addresse
         } else if (this.address) {
-          this.getLocationByAdress(this.address, setLocationFn);
+          this.getLocationByAddress(this.address, setLocationFn);
           // Lat und Lng
         } else {
           this.getLocationByLatLng(this.lat, this.lng, setLocationFn);
@@ -133,72 +153,61 @@
             const pos = new google.maps.LatLng(
               position.coords.latitude,
               position.coords.longitude);
-            self.location = pos;
-
-            if (fn) {
-              fn(position);
-            }
-
-            console.log('GPS');
+            fn(pos);
           } else {
-            console.log('GPS zu ungenau!');
-            self.getLocationByAdress(self.address, fn, false);
+            console.log('GPS inaccurate!');
+            self.getLocationByAddress(self.address, fn, false);
           }
         };
 
         const currentPosFn = function () {
-          console.log('GPS in ihrem Browser nicht Aktiviert!');
-          self.getLocationByAdress(self.address, fn, false);
+          console.log('GPS is not active');
+          self.getLocationByAddress(self.address, fn);
         };
 
-        if (navigator.geolocation) {
+        if (navigator.geolocation && fn) {
           navigator.geolocation.getCurrentPosition(
             currentPosGeoFn,
             currentPosFn,
             { timeout: 8000 },
           );
+        } else if (fn) {
+          console.log('No GPS!');
+          self.getLocationByAddress(self.address, fn);
         } else {
-          console.log('GPS in ihrem Browser nicht Aktiviert!');
-
-          if (fn) {
-            fn(false);
-          }
+          console.log('GPS: no function');
         }
       },
 
       // Location by Adress
-      getLocationByAdress(addressString, fn, statusGPS) {
-        const self = this;
+      getLocationByAddress(addressString, fn) {
+        if (fn) {
+          const self = this;
+          this.geocoder = new google.maps.Geocoder();
 
-        this.geocoder = new google.maps.Geocoder();
+          const locationFn = function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+              fn(results[0].geometry.location);
+            } else {
+              fn(new google.maps.LatLng(self.lat, self.lng));
+            }
+          };
 
-        const locationFn = function (results, status) {
-          if (status === google.maps.GeocoderStatus.OK) {
-            self.location = results[0].geometry.location;
-          } else {
-            self.location = new google.maps.LatLng(self.lat, self.lng);
-          }
-
-          if (statusGPS != null && fn) {
-            fn(statusGPS);
-          } else if (fn) {
-            fn(self.location);
-          }
-        };
-
-        this.geocoder.geocode(
-          { address: addressString },
-          locationFn,
-        );
+          this.geocoder.geocode(
+            { address: addressString },
+            locationFn,
+          );
+        } else {
+          console.log('Address: no function');
+        }
       },
 
       // Set Location by Lat / Lon
       getLocationByLatLng(lat, lng, fn) {
-        const pos = new google.maps.LatLng(lat, lng);
-        this.location = pos;
-
         if (fn) {
-          fn(pos);
+          fn(new google.maps.LatLng(lat, lng));
+        } else {
+          console.log('LatLng: no function');
         }
       },
 
@@ -221,25 +230,20 @@
         // Set Style
         this.setStyle();
 
-        // Ready Function
-        if (this.ready) {
-          this.ready();
-        }
-
         // Set Center Markter
         this.setMarker({
           location: this.location,
-          top: this.top,
-          left: this.left,
-          find: false,
-          address: false,
           showMarker: this.showMarker,
           markerIcon: this.markerIcon,
-          markerTitle: this.markerTitle,
           markerContent: this.markerContent,
           markerOpen: this.markerOpen,
           disableAutoPan: false,
         });
+
+        // Ready Function
+        if (this.ready) {
+          this.ready();
+        }
       },
 
       // Set Google Maps Style
@@ -255,10 +259,7 @@
       setMarker(config) {
         const markerCustom = {
           obj: false,
-          location: [],
-          top: 0,
-          left: 0,
-          address: false,
+          location: false,
           find: false,
           showMarker: true,
           markerOpen: false,
@@ -269,14 +270,15 @@
           radiusDictance: false,
           disableAutoPan: true,
           infowindow: false,
-          open: false,
+          isOpen: false,
         };
 
         const marker = Object.assign({}, markerCustom, config);
 
         marker.obj = new google.maps.Marker({
           position: marker.location,
-          icon: marker.markerIcon,
+          icon: marker.markerIcon ? marker.markerIcon : google.maps.Icon,
+          animation: this.markerAnimation ? google.maps.Animation.DROP : false,
           map: this.map,
         });
 
@@ -292,16 +294,16 @@
 
           const markerOpenFn = function () {
             marker.infowindow.open(this.map, marker.obj);
-            marker.open = true;
+            marker.isOpen = true;
           };
 
           const markerCloseFn = function () {
             marker.infowindow.close();
-            marker.open = false;
+            marker.isOpen = false;
           };
 
           const markserClickToggleFn = function () {
-            if (marker.open) {
+            if (marker.isOpen) {
               markerCloseFn();
             } else {
               markerOpenFn();
@@ -320,11 +322,11 @@
           }
         }
 
-        this.markerList.push(marker);
+        this.markerObjectList.push(marker);
       },
 
       getMarkerList() {
-        return this.markerList;
+        return this.markerObjectList;
       },
     },
   });

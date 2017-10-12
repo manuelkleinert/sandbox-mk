@@ -7,3 +7,6 @@ import './modules/gmaps';
 UIkit.use(Icons);
 // Execute Modules
 PageLoader();
+
+// UIkit.gmaps('.gmapTest', {});
+// UIkit.gmaps('.gmapTest2', {});
