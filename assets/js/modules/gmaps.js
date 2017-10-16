@@ -25,6 +25,7 @@
       markerOpen: Boolean,
       markerToggle: Boolean,
       markerHover: Boolean,
+      markerList: Object,
       style: String,
       styledMap: String,
       centerLatLng: Object,
@@ -34,10 +35,10 @@
     },
 
     defaults: {
-      apiKey: 'AIzaSyCWZ8cfcqoAGddyW3WO5lbCdwU2luJwbhc',
+      apiKey: '',
       lat: false,
       lng: false,
-      address: 'Sandgruebestrasse 4, 6210 Sursee',
+      address: '6210 Sursee',
       location: false,
       geoLocation: false,
       zoom: 12,
@@ -50,10 +51,11 @@
       showMarker: true,
       markerIcon: false,
       markerAnimation: false,
-      markerContent: '<strong>Wochen Pass AG</strong><br>Sandgruebestrasse 4<br>6210 Sursee',
+      markerContent: '',
       markerOpen: true,
       markerToggle: false,
       markerHover: false,
+      markerList: false,
       style: [],
       centerLatLng: false,
       overlayLatLng: false,
@@ -82,7 +84,7 @@
           // Google Map is Ready
           window.mapsCallback = function () {
             if (typeof google === 'object' && typeof google.maps === 'object') {
-              self.setLocation(self.setMap);
+              self.getLocation(self.setMap, self.location, self.address, self.lat, self.lng);
 
               // set Event for Second map init
               if (window.CustomEvent) {
@@ -106,41 +108,34 @@
           document.getElementsByTagName('head')[0].appendChild(googleScript);
         } else {
           const gmapInitFn = function () {
-            console.log(self.mapObj);
-            self.setLocation(self.setMap);
+            self.getLocation(self.setMap, self.location, self.address, self.lat, self.lng);
           };
           document.addEventListener('gmapsReady', gmapInitFn, false);
         }
       },
 
-      setLocation(fn) {
-        const self = this;
-
-        const setLocationFn = function (pos) {
-          if (pos) {
-            self.location = pos;
-            self.lat = self.location.lat();
-            self.lng = self.location.lng();
-
-            if (fn) {
-              fn();
-            }
+      getLocation(fn, location, address, lat, lng) {
+        const getLocationFn = function (pos) {
+          if (pos && fn) {
+            fn(pos);
           } else {
             console.log('no location');
           }
         };
 
-        if (this.location) {
-          setLocationFn(this.location);
+        if (location) {
+          getLocationFn(location);
           // Geo Daten
         } else if (this.geoLocation) {
-          this.getLocationByGeolocation(setLocationFn);
+          this.getLocationByGeolocation(getLocationFn);
           // Addresse
         } else if (this.address) {
-          this.getLocationByAddress(this.address, setLocationFn);
+          this.getLocationByAddress(address, getLocationFn);
           // Lat und Lng
+        } else if (this.lat && this.lng) {
+          this.getLocationByLatLng(lat, lng, getLocationFn);
         } else {
-          this.getLocationByLatLng(this.lat, this.lng, setLocationFn);
+          console.log('No location');
         }
       },
 
@@ -212,7 +207,9 @@
       },
 
       // Set Map
-      setMap() {
+      setMap(pos) {
+        this.location = pos;
+
         this.mapOptions = {
           zoomControl: this.zoomControl,
           mapTypeControl: this.mapTypeControl,
@@ -239,6 +236,9 @@
           markerOpen: this.markerOpen,
           disableAutoPan: false,
         });
+
+        // Set Marker list
+        this.setMarkerList();
 
         // Ready Function
         if (this.ready) {
@@ -323,6 +323,32 @@
         }
 
         this.markerObjectList.push(marker);
+      },
+
+      setMarkerList() {
+        if (this.markerList) {
+          const self = this;
+          this.markerList = JSON.parse(this.markerList);
+
+          const markerListFn = function (obj) {
+            const setMarker = function (pos) {
+              self.setMarker({
+                location: pos,
+                find: true,
+                showMarker: obj.showMarker,
+                markerOpen: obj.markerOpen,
+                markerIcon: obj.markerIcon,
+                markerContent: obj.markerContent,
+                markerDiv: obj.markerDiv,
+              });
+            };
+
+            self.getLocation(setMarker, obj.location, obj.address, obj.lat, obj.lng);
+          };
+
+          this.markerList.forEach(markerListFn);
+          // console.log(this.markerList);
+        }
       },
 
       getMarkerList() {
