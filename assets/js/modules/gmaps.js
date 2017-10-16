@@ -78,34 +78,35 @@
       loadMap() {
         const self = this;
 
-        // Google Map is Ready
-        window.mapsCallback = function () {
-          if (typeof google === 'object' && typeof google.maps === 'object') {
-            self.setLocation(self.setMap);
-
-            // set Event for Second map init
-            if (window.CustomEvent) {
-              const event = new CustomEvent('gmapsReady', {
-                detail: 'GoogleMaps ready',
-              });
-              document.dispatchEvent(event);
-            } else {
-              const event = document.createEvent('CustomEvent');
-              event.initCustomEvent('gmapsReady', true, true, {
-                detail: 'GoogleMaps ready',
-              });
-              document.dispatchEvent(event);
-            }
-          }
-        };
-
         if (document.querySelectorAll('script[src^="https://maps.googleapis.com/maps/api/js?key"]').length === 0) {
+          // Google Map is Ready
+          window.mapsCallback = function () {
+            if (typeof google === 'object' && typeof google.maps === 'object') {
+              self.setLocation(self.setMap);
+
+              // set Event for Second map init
+              if (window.CustomEvent) {
+                const event = new CustomEvent('gmapsReady', {
+                  detail: 'GoogleMaps ready',
+                });
+                document.dispatchEvent(event);
+              } else {
+                const event = document.createEvent('CustomEvent');
+                event.initCustomEvent('gmapsReady', true, true, {
+                  detail: 'GoogleMaps ready',
+                });
+                document.dispatchEvent(event);
+              }
+            }
+          };
+
           const googleScript = document.createElement('script');
           googleScript.setAttribute('type', 'text/javascript');
           googleScript.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=mapsCallback`);
           document.getElementsByTagName('head')[0].appendChild(googleScript);
         } else {
           const gmapInitFn = function () {
+            console.log(self.mapObj);
             self.setLocation(self.setMap);
           };
           document.addEventListener('gmapsReady', gmapInitFn, false);
@@ -114,7 +115,6 @@
 
       setLocation(fn) {
         const self = this;
-        console.log(this);
 
         const setLocationFn = function (pos) {
           if (pos) {
@@ -249,7 +249,7 @@
       // Set Google Maps Style
       setStyle() {
         if (this.style) {
-          this.styledMap = new google.maps.StyledMapType(this.style, { name: 'Custom Style' });
+          this.styledMap = new google.maps.StyledMapType(JSON.parse(this.style), { name: 'Custom Style' });
           this.map.mapTypes.set('map_style', this.styledMap);
           this.map.setMapTypeId('map_style');
         }
